@@ -1,0 +1,33 @@
+version: "1.0"
+
+services:
+  backend:
+    image: backend
+    build:
+      context: ./backend
+    env_file: ./backend/config/api.env
+    ports:
+      - "5000:5000"
+    networks:
+      - nawyha-app
+    volumes:
+      - ./backend/:/usr/src/app
+      - /usr/src/app/node_modules
+    depends_on:
+      - database
+
+  database:
+    image: mongo:4.4-bionic
+    ports:
+      - "27017:27017"
+    networks:
+      - nawyha-app
+    volumes:
+      - mongo-data:/data/db
+
+networks:
+  nawyha-app:
+    driver: bridge
+volumes:
+  mongo-data:
+    driver: local
